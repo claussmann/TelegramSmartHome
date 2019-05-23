@@ -4,3 +4,7 @@ pluginManagement {
 	}
 }
 rootProject.name = 'SmartCam'
+
+include ':TelegramIO'
+project(':TelegramIO').projectDir = new File('../TelegramIO')
+

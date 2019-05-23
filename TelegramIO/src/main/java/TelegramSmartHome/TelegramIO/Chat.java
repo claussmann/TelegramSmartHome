@@ -1,4 +1,4 @@
-package TelegramSmartHome.SmartCam.Telegram;
+package TelegramSmartHome.TelegramIO;
 
 public class Chat {
     int id;

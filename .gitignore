@@ -28,3 +28,14 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+
+#
+*.conf
+
+#
+build/*
+*.properties
+SmartCam/build*
+*.class
+*.jar
+*/build/*
