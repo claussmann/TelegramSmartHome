@@ -8,7 +8,7 @@ public class SmartCamApplication {
 	public static void main(String[] args) {
 		Config config = new Config();
 
-		MessageSendService sendService =new MessageSendService("test");
+		MessageSendService sendService =new MessageSendService(config.getBotToken());
 		sendService.sendMessage("foo", "bar");
 	}
 
