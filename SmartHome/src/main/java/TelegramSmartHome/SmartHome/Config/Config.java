@@ -40,4 +40,8 @@ public class Config {
         return conf.botToken;
     }
 
+    public int getLastMessageID(){
+        return conf.lastMessage;
+    }
+
 }
