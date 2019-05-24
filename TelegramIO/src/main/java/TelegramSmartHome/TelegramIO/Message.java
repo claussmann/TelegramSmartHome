@@ -1,8 +1,10 @@
 package TelegramSmartHome.TelegramIO;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(value = {"entities"})
 public class Message {
     int message_id;
     User from;
