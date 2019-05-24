@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class UpdateService {
     private String token;
-    private int messageOffset;
+    private int lastUpdateId;
     List<IMessageEvaluator> evaluators;
 
     public UpdateService(String botToken){
@@ -20,9 +20,9 @@ public class UpdateService {
         evaluators = new ArrayList<>();
     }
 
-    public UpdateService(String botToken, int messageOffset){
+    public UpdateService(String botToken, int lastUpdateId){
         this.token=botToken;
-        this.messageOffset=messageOffset;
+        this.lastUpdateId = lastUpdateId;
         evaluators = new ArrayList<>();
 
     }
@@ -54,10 +54,10 @@ public class UpdateService {
         Result result = Try.of(() -> objectMapper.readValue(jsonResponse, Result.class))
                 .getOrElse(new Result());
         newMessages = result.updates.stream()
-                    .filter(update -> update.update_id > messageOffset)
+                    .filter(update -> update.update_id > lastUpdateId)
                     .collect(Collectors.toList());
-        newMessages.stream().forEach(update -> notifyUpdateListeners(update));
-
+        newMessages.forEach(this::notifyUpdateListeners);
+        lastUpdateId = (newMessages.size() > 0) ? newMessages.get(newMessages.size()-1).update_id : lastUpdateId;
     }
 
     private void notifyUpdateListeners(Update update) {
