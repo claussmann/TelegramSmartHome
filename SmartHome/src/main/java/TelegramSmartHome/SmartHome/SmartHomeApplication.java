@@ -1,9 +1,9 @@
-package TelegramSmartHome.SmartCam;
+package TelegramSmartHome.SmartHome;
 
-import TelegramSmartHome.SmartCam.Config.Config;
+import TelegramSmartHome.SmartHome.Config.Config;
 import TelegramSmartHome.TelegramIO.MessageSendService;
 
-public class SmartCamApplication {
+public class SmartHomeApplication {
 
 	public static void main(String[] args) {
 		Config config = new Config();

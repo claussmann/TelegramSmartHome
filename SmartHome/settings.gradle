@@ -3,7 +3,7 @@ pluginManagement {
 		gradlePluginPortal()
 	}
 }
-rootProject.name = 'SmartCam'
+rootProject.name = 'SmartHome'
 
 include ':TelegramIO'
 project(':TelegramIO').projectDir = new File('../TelegramIO')

@@ -1,4 +1,4 @@
-package TelegramSmartHome.SmartCam.Config;
+package TelegramSmartHome.SmartHome.Config;
 
 import lombok.Data;
 
