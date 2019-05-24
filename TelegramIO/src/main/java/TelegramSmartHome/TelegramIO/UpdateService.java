@@ -51,7 +51,7 @@ public class UpdateService {
         String jsonResponse = httpsGetRequest();
         ObjectMapper objectMapper = new ObjectMapper();
         List<Update> newMessages;
-        Result result = Try.of(() -> {return objectMapper.readValue(jsonResponse, Result.class);})
+        Result result = Try.of(() -> objectMapper.readValue(jsonResponse, Result.class))
                 .getOrElse(new Result());
         newMessages = result.updates.stream()
                     .filter(update -> update.update_id > messageOffset)
