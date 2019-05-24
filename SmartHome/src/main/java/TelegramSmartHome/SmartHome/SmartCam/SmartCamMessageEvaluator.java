@@ -11,6 +11,6 @@ public class SmartCamMessageEvaluator implements IMessageEvaluator {
 
     @Override
     public void processMessage(Message message) {
-
+        System.out.println(message.getMessageText());
     }
 }
