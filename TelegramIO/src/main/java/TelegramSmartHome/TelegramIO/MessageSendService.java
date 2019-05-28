@@ -8,7 +8,7 @@ public class MessageSendService {
         this.token = botToken;
     }
 
-    public void sendMessage(String recipientUserId, String messageText){
+    public void sendMessage(int recipientUserId, String messageText){
         String url = "https://api.telegram.org/bot" + token +
                 "/sendMessage?chat_id=" + recipientUserId +
                 "&text=" + messageText;
