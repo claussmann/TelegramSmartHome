@@ -30,7 +30,7 @@ HELP.md
 .vscode/
 
 #
-*.conf
+SmartHome/config.conf
 
 #
 build/*
