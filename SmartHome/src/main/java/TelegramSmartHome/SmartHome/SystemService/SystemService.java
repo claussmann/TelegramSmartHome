@@ -29,6 +29,9 @@ public class SystemService implements IMessageEvaluator {
             case "/reboot":
                 sendService.sendMessage(message.getSenderId(), "Rebooting now!\nGive me just a second!");
                 reboot();
+                break;
+            case "/status":
+                sendService.sendMessage(message.getSenderId(), "Waiting for commands!");
         }
     }
 
