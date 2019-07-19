@@ -22,7 +22,7 @@ public class JsonHandler {
 
     private String httpsGetRequest() {
         StringBuilder responseBody = new StringBuilder();
-        URL url = Try.of(() -> new URL("https://api.telegram.org/bot" + token + "/getNewMessages"))
+        URL url = Try.of(() -> new URL("https://api.telegram.org/bot" + token + "/getUpdates"))
                 .getOrNull();
         URLConnection urlConnection = Try.of(url :: openConnection)
                 .getOrNull();
@@ -42,7 +42,6 @@ public class JsonHandler {
     public List<Update> getNewMessages(int lastUpdateId) {
         String jsonResponse = httpsGetRequest();
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Update> newMessages;
         Result result = Try.of(() -> objectMapper.readValue(jsonResponse, Result.class))
                 .getOrElse(new Result());
         return result.updates.stream()
