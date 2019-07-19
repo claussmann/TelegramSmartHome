@@ -1,28 +1,28 @@
 package TelegramSmartHome.TelegramIO;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import TelegramSmartHome.TelegramIO.NewMessageHandler.JsonHandler;
+import TelegramSmartHome.TelegramIO.NewMessageHandler.Update;
 import  io.vavr.control.Try;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UpdateService {
     private String token;
     private int lastUpdateId;
     List<IMessageEvaluator> evaluators;
+    private JsonHandler jsonHandler;
 
     public UpdateService(String botToken){
         this.token=botToken;
+        jsonHandler = new JsonHandler(botToken);
         evaluators = new ArrayList<>();
     }
 
     public UpdateService(String botToken, int lastUpdateId){
         this.token=botToken;
         this.lastUpdateId = lastUpdateId;
+        jsonHandler = new JsonHandler(botToken);
         evaluators = new ArrayList<>();
 
     }
@@ -48,40 +48,14 @@ public class UpdateService {
     }
 
     private void getUpdates(){
-        String jsonResponse = httpsGetRequest();
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Update> newMessages;
-        Result result = Try.of(() -> objectMapper.readValue(jsonResponse, Result.class))
-                .getOrElse(new Result());
-        newMessages = result.updates.stream()
-                    .filter(update -> update.update_id > lastUpdateId)
-                    .collect(Collectors.toList());
+        List<Update> newMessages = jsonHandler.getNewMessages(lastUpdateId);
         newMessages.forEach(this::notifyUpdateListeners);
-        lastUpdateId = (newMessages.size() > 0) ? newMessages.get(newMessages.size()-1).update_id : lastUpdateId;
+        lastUpdateId = (newMessages.size() > 0) ? newMessages.get(newMessages.size()-1).getUpdate_id() : lastUpdateId;
     }
 
     private void notifyUpdateListeners(Update update) {
         for (IMessageEvaluator evaluator : evaluators){
-            evaluator.processMessage(update.message);
+            evaluator.processMessage(update.getMessage());
         }
-    }
-
-    private String httpsGetRequest() {
-        StringBuilder responseBody = new StringBuilder();
-        URL url = Try.of(() -> new URL("https://api.telegram.org/bot" + token + "/getUpdates"))
-                .getOrNull();
-        URLConnection urlConnection = Try.of(url :: openConnection)
-                .getOrNull();
-        InputStream inputStream = Try.of(urlConnection :: getInputStream)
-                .getOrElse(new ByteArrayInputStream( "".getBytes()));
-
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String input = Try.of(bufferedReader :: readLine).getOrNull();
-        while (input != null) {
-            responseBody.append(input);
-            input = Try.of(bufferedReader :: readLine).getOrNull();
-        }
-        Try.run(bufferedReader :: close).recover(Exception.class, e -> {e.printStackTrace(); return null;});
-        return responseBody.toString();
     }
 }

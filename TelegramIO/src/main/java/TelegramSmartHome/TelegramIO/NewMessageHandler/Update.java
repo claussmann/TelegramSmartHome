@@ -1,4 +1,4 @@
-package TelegramSmartHome.TelegramIO;
+package TelegramSmartHome.TelegramIO.NewMessageHandler;
 
 import lombok.Data;
 
