@@ -1,46 +1,26 @@
 package TelegramSmartHome.TelegramIO.NewMessageHandler;
 
+import TelegramSmartHome.TelegramIO.HttpsApiComm.HttpsHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class JsonHandler {
 
     private String token;
+    private HttpsHandler httpsHandler;
 
-    public JsonHandler(String botToken) {
+    public JsonHandler(String botToken, HttpsHandler httpsHandler) {
         this.token = botToken;
+        this.httpsHandler = httpsHandler;
     }
 
-    public String httpsGetRequest() {
-        StringBuilder responseBody = new StringBuilder();
-        URL url = Try.of(() -> new URL("https://api.telegram.org/bot" + token + "/getUpdates"))
-                .getOrNull();
-        URLConnection urlConnection = Try.of(url :: openConnection)
-                .getOrNull();
-        InputStream inputStream = Try.of(urlConnection :: getInputStream)
-                .getOrElse(new ByteArrayInputStream( "".getBytes()));
 
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-        String input = Try.of(bufferedReader :: readLine).getOrNull();
-        while (input != null) {
-            responseBody.append(input);
-            input = Try.of(bufferedReader :: readLine).getOrNull();
-        }
-        Try.run(bufferedReader :: close).recover(Exception.class, e -> {e.printStackTrace(); return null;});
-        return responseBody.toString();
-    }
 
     public List<Update> getNewMessages(long lastUpdateId) {
-        String jsonResponse = httpsGetRequest();
+        String jsonResponse = httpsHandler.httpsGetRequest();
         ObjectMapper objectMapper = new ObjectMapper();
         Result result = Try.of(() -> objectMapper.readValue(jsonResponse, Result.class))
                 .getOrElse(new Result());
