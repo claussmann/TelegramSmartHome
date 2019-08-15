@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(value = {"is_bot", "last_name"})
 public class User {
-    int id;
+    long id;
     String first_name;
     String username;
     boolean is_bot;

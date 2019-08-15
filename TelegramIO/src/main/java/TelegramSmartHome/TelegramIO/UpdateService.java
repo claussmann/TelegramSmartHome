@@ -9,7 +9,7 @@ import java.util.List;
 
 public class UpdateService {
     private String token;
-    private int lastUpdateId;
+    private long lastUpdateId;
     List<IMessageEvaluator> evaluators;
     private JsonHandler jsonHandler;
 

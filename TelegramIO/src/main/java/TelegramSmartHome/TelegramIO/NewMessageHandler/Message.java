@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(value = {"entities"})
 public class Message {
-    int message_id;
+    long message_id;
     User from;
     Chat chat;
     int date;
@@ -24,7 +24,7 @@ public class Message {
         return from.first_name;
     }
 
-    public int getSenderId(){
+    public long getSenderId(){
         return from.id;
     }
 
