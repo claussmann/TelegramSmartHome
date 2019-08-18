@@ -2,22 +2,23 @@ package TelegramSmartHome.SmartHome.Config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.Scanner;
 
 public class Config {
-    String configFile="config.conf"; //TODO:set location to default (/etc/TelegramSmartHome/config) except for developer
+    private String configFile = "config.conf"; //TODO:set location to default (/etc/TelegramSmartHome/config) except for developer
 
-    ConfigFile conf;
+    private ConfigFile conf;
 
     public Config(){
+        conf = new ConfigFile();
         String json=readConfigFile();
         ObjectMapper mapper = new ObjectMapper();
         try {
             conf = mapper.readValue(json, ConfigFile.class);
+            System.out.println("Configuration loaded successfully");
         } catch (IOException e) {
-            e.printStackTrace();
+            createNewConfig();
         }
     }
 
@@ -31,9 +32,36 @@ public class Config {
                 ret+=line;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("No Config found!");
         }
         return ret;
+    }
+
+    private void createNewConfig() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Creating new Config-File");
+        System.out.println("Insert your Bot Token:");
+        String token = null;
+        try {
+            token = br.readLine();
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        conf.setBotToken(token);
+        conf.setLastMessage(0);
+
+        saveConfig();
+    }
+
+    private void saveConfig() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(new FileOutputStream("config.conf"), conf);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Successfully saved Configuration (see config.conf)");
     }
 
     public String getBotToken(){
