@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 
 public class JsonHandler {
 
-    private String token;
     private HttpsHandler httpsHandler;
 
-    public JsonHandler(String botToken, HttpsHandler httpsHandler) {
-        this.token = botToken;
+    public JsonHandler(HttpsHandler httpsHandler) {
         this.httpsHandler = httpsHandler;
     }
 

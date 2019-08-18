@@ -18,7 +18,7 @@ public class UpdateService {
     public UpdateService(String botToken){
         this.token=botToken;
         this.httpsHandler = new HttpsHandler(this.token);
-        jsonHandler = new JsonHandler(botToken, httpsHandler);
+        jsonHandler = new JsonHandler(httpsHandler);
         evaluators = new ArrayList<>();
     }
 
@@ -26,7 +26,7 @@ public class UpdateService {
         this.token=botToken;
         this.httpsHandler = new HttpsHandler(this.token);
         this.lastUpdateId = lastUpdateId;
-        jsonHandler = new JsonHandler(botToken, httpsHandler);
+        jsonHandler = new JsonHandler(httpsHandler);
         evaluators = new ArrayList<>();
 
     }
@@ -54,7 +54,7 @@ public class UpdateService {
     private void getUpdates(){
         List<Update> newMessages = jsonHandler.getNewMessages(lastUpdateId);
         newMessages.forEach(this::notifyUpdateListeners);
-        //Just echoes all new Messages 
+        //Just echoes all new Messages
         newMessages.forEach(this::echoInput);
         lastUpdateId = (newMessages.size() > 0) ? newMessages.get(newMessages.size()-1).getUpdate_id() : lastUpdateId;
     }

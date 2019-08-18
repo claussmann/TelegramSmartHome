@@ -26,7 +26,7 @@ public class JsonHandlerTest {
         testSecondJson = "{\"ok\":true,\"result\":[{\"update_id\":2,\"message\":{\"message_id\":3,\"from\":{\"id\":42,\"is_bot\":false,\"first_name\":\"Test\",\"last_name\":\"Test\",\"username\":\"TestUser2\",\"language_code\":\"en\"},\"chat\":{\"id\":42,\"first_name\":\"Test\",\"last_name\":\"Test\",\"username\":\"TestUser2\",\"type\":\"private\"},\"date\":1563531123,\"text\":\"User2\"}}]}";
         httpsHandler = mock(HttpsHandler.class);
         when(httpsHandler.httpsGetRequest()).thenReturn(testJson).thenReturn(testSecondJson);
-        jsonHandler = new JsonHandler("token", httpsHandler);
+        jsonHandler = new JsonHandler(httpsHandler);
 
         newMessages = jsonHandler.getNewMessages(0);
 
