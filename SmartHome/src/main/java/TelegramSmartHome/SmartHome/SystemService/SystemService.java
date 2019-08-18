@@ -1,7 +1,7 @@
 package TelegramSmartHome.SmartHome.SystemService;
 
 import TelegramSmartHome.TelegramIO.IMessageEvaluator;
-import TelegramSmartHome.TelegramIO.Message;
+import TelegramSmartHome.TelegramIO.NewMessageHandler.Message;
 import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
 import io.vavr.control.Try;
