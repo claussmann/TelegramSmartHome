@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(value = {"last_name"})
 public class Chat {
-    int id;
+    long id;
     String first_name;
     String username;
     String type;
