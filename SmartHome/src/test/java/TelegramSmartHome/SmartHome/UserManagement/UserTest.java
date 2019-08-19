@@ -22,6 +22,7 @@ public class UserTest {
     @Test
     public void userIsInGroup(){
         assertTrue(user.isMemberOf("foo"));
+        assertTrue(user.isMemberOf("bar"));
     }
 
     @Test
@@ -42,5 +43,6 @@ public class UserTest {
         assertTrue(user.isMemberOf("foo"));
         user.removeFromGroup("foo");
         assertFalse(user.isMemberOf("foo"));
+        assertTrue(user.isMemberOf("bar"));
     }
 }
