@@ -1,4 +1,4 @@
-package TelegramSmartHome.TelegramIO.HttpsApiComm;
+package TelegramSmartHome.TelegramIO.api;
 
 import io.vavr.control.Try;
 

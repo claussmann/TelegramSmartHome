@@ -1,6 +1,8 @@
-package TelegramSmartHome.TelegramIO.NewMessageHandler;
+package TelegramSmartHome.TelegramIO.api;
 
-import TelegramSmartHome.TelegramIO.HttpsApiComm.HttpsHandler;
+import TelegramSmartHome.TelegramIO.NewMessageHandler.Result;
+import TelegramSmartHome.TelegramIO.NewMessageHandler.Update;
+import TelegramSmartHome.TelegramIO.api.HttpsHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
 
@@ -22,8 +24,8 @@ public class JsonHandler {
         ObjectMapper objectMapper = new ObjectMapper();
         Result result = Try.of(() -> objectMapper.readValue(jsonResponse, Result.class))
                 .getOrElse(new Result());
-        return result.updates.stream()
-                .filter(update -> update.update_id > lastUpdateId)
+        return result.getUpdates().stream()
+                .filter(update -> update.getUpdate_id() > lastUpdateId)
                 .collect(Collectors.toList());
     }
 }
