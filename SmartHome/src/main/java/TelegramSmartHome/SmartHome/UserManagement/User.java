@@ -18,7 +18,7 @@ public class User {
     }
 
     public void removeFromGroup(String groupId){
-        groupmemberships.remove(groupId.toLowerCase());
+        while(groupmemberships.remove(groupId.toLowerCase()));
     }
 
     public boolean isMemberOf(String groupId) {
