@@ -1,6 +1,6 @@
 package TelegramSmartHome.TelegramIO;
 
-import TelegramSmartHome.TelegramIO.HttpsApiComm.HttpsHandler;
+import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
 
 public class MessageSendService {
 

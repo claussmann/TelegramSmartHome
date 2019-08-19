@@ -1,4 +1,4 @@
-package TelegramSmartHome.TelegramIO.NewMessageHandler;
+package TelegramSmartHome.TelegramIO.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

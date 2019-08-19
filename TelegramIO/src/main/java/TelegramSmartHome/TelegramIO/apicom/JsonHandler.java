@@ -1,8 +1,7 @@
-package TelegramSmartHome.TelegramIO.api;
+package TelegramSmartHome.TelegramIO.apicom;
 
-import TelegramSmartHome.TelegramIO.NewMessageHandler.Result;
-import TelegramSmartHome.TelegramIO.NewMessageHandler.Update;
-import TelegramSmartHome.TelegramIO.api.HttpsHandler;
+import TelegramSmartHome.TelegramIO.message.Result;
+import TelegramSmartHome.TelegramIO.message.Update;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
 

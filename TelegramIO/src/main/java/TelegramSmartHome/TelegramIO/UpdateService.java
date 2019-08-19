@@ -1,8 +1,8 @@
 package TelegramSmartHome.TelegramIO;
 
-import TelegramSmartHome.TelegramIO.HttpsApiComm.HttpsHandler;
-import TelegramSmartHome.TelegramIO.NewMessageHandler.JsonHandler;
-import TelegramSmartHome.TelegramIO.NewMessageHandler.Update;
+import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
+import TelegramSmartHome.TelegramIO.apicom.JsonHandler;
+import TelegramSmartHome.TelegramIO.message.Update;
 import  io.vavr.control.Try;
 
 import java.util.ArrayList;

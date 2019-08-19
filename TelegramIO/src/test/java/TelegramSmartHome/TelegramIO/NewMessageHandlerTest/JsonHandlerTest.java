@@ -1,7 +1,8 @@
 package TelegramSmartHome.TelegramIO.NewMessageHandlerTest;
 
-import TelegramSmartHome.TelegramIO.HttpsApiComm.HttpsHandler;
-import TelegramSmartHome.TelegramIO.NewMessageHandler.*;
+import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
+import TelegramSmartHome.TelegramIO.message.*;
+import TelegramSmartHome.TelegramIO.apicom.JsonHandler;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
