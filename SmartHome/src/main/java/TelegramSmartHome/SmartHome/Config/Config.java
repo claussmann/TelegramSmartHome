@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Config {
     private String configFile = "config.conf"; //TODO:set location to default (/etc/TelegramSmartHome/config) except for developer
@@ -15,6 +17,25 @@ public class Config {
         ObjectMapper mapper = new ObjectMapper();
         conf = Try.of(() -> mapper.readValue(json, ConfigFile.class))
                 .getOrElse(createNewConfig());
+    }
+
+
+    public String getBotToken() {
+        return conf.botToken;
+    }
+
+    public int getLastMessageID() {
+        return conf.lastMessage;
+    }
+
+    public Collection<String> groupsOfUser(String username){
+        Collection<String> groups = new ArrayList<>();
+        for(Usergroup group : conf.getUsergroups()){
+            if(group.containsMember(username)){
+                groups.add(group.getGroupname());
+            }
+        }
+        return groups;
     }
 
     private String readConfigFile() throws Exception {
@@ -57,14 +78,6 @@ public class Config {
             e.printStackTrace();
         }
         System.out.println("Successfully saved Configuration (see "+this.configFile+")");
-    }
-
-    public String getBotToken() {
-        return conf.botToken;
-    }
-
-    public int getLastMessageID() {
-        return conf.lastMessage;
     }
 
 }
