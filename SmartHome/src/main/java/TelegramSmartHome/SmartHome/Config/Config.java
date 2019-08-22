@@ -24,7 +24,11 @@ public class Config {
         return conf.botToken;
     }
 
-    public int getLastMessageID() {
+    public void updateBotToken(String newToken) {
+        conf.setBotToken(newToken);
+    }
+
+    public long getLastMessageID() {
         return conf.lastMessage;
     }
 

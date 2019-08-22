@@ -22,7 +22,7 @@ public class UpdateService {
         evaluators = new ArrayList<>();
     }
 
-    public UpdateService(String botToken, int lastUpdateId){
+    public UpdateService(String botToken, long lastUpdateId){
         this.token=botToken;
         this.httpsHandler = new HttpsHandler(this.token);
         this.lastUpdateId = lastUpdateId;

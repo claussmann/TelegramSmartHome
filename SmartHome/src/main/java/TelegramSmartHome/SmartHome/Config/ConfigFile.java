@@ -7,6 +7,6 @@ import java.util.Collection;
 @Data
 public class ConfigFile {
     String botToken;
-    int lastMessage;
+    long lastMessage;
     Collection<Usergroup> usergroups;
 }
