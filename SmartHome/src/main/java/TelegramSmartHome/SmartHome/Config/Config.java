@@ -11,14 +11,37 @@ public class Config {
     private String configFile = "config.conf"; //TODO:set location to default (/etc/TelegramSmartHome/config) except for developer
 
     private ConfigFile conf;
+    private ConfigUI configUI;
+    private boolean createdNewConfig;
 
     public Config() {
+        createdNewConfig = false;
+        configUI = new ConfigUI();
+
         String json = Try.of(() -> readConfigFile()).getOrElse("");
         ObjectMapper mapper = new ObjectMapper();
-        conf = Try.of(() -> mapper.readValue(json, ConfigFile.class))
-                .getOrElse(createNewConfig());
+
+        //Dieser Code verursacht die Erstellung einer neuen COnfig bei jedem Programmstart -> no idea why
+        //der Json String wird korrekt eingelesen, sehr seltsam
+        //conf = Try.of(() -> mapper.readValue(json, ConfigFile.class))
+        //        .getOrElse(createNewConfig());
+
+        try {
+            conf = mapper.readValue(json, ConfigFile.class);
+        } catch (IOException e) {
+            conf = createNewConfig();
+        }
     }
 
+    //Constructor for future Tests -> Mock Injection
+    public Config(ConfigFile configFile, ConfigUI configUI, boolean createdNewConfig) {
+        this.createdNewConfig = createdNewConfig;
+        this.configUI = configUI;
+        this.conf = configFile;
+    }
+
+
+    public boolean isNewConfig() { return createdNewConfig;}
 
     public String getBotToken() {
         return conf.botToken;
@@ -54,23 +77,19 @@ public class Config {
 
     private ConfigFile createNewConfig() {
         ConfigFile newConf = new ConfigFile();
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Creating new Config-File");
-        System.out.println("Insert your Bot Token:");
-        String token = null;
-        try {
-            token = br.readLine();
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        configUI.writeMessage("Creating new Config-File");
+        configUI.writeMessage("Insert your Bot Token:");
+
+        String token = configUI.readLine();
         newConf.setBotToken(token);
         newConf.setLastMessage(0);
         saveConfig(newConf);
+        createdNewConfig = true;
         return newConf;
     }
 
-    private void saveConfig() {
+    public  void saveConfig() {
         saveConfig(conf);
     }
 
@@ -81,7 +100,7 @@ public class Config {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Successfully saved Configuration (see "+this.configFile+")");
+        configUI.writeMessage("Successfully saved Configuration (see "+this.configFile+")");
     }
 
 }
