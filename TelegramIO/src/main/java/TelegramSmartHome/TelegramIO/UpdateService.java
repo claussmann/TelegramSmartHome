@@ -15,13 +15,6 @@ public class UpdateService {
     private JsonHandler jsonHandler;
     private HttpsHandler httpsHandler;
 
-    public UpdateService(String botToken){
-        this.token=botToken;
-        this.httpsHandler = new HttpsHandler(this.token);
-        jsonHandler = new JsonHandler(httpsHandler);
-        evaluators = new ArrayList<>();
-    }
-
     public UpdateService(String botToken, long lastUpdateId){
         this.token=botToken;
         this.httpsHandler = new HttpsHandler(this.token);

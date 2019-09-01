@@ -13,7 +13,7 @@ public class SmartHomeApplication {
 	public static void main(String[] args) {
 		ConfigService config = new ConfigService();
 
-		MessageSendService sendService = new MessageSendService(new HttpsHandler(config.getBotToken()));
+		MessageSendService sendService = new MessageSendService(config.getBotToken());
 		UpdateService updateService = new UpdateService(config.getBotToken(), config.getLastMessageId());
 
 		SmartCam cam = new SmartCam(updateService,sendService);
