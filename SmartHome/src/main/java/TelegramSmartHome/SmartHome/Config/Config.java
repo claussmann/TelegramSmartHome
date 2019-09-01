@@ -21,14 +21,10 @@ public class Config {
         String json = Try.of(() -> readConfigFile()).getOrElse("");
         ObjectMapper mapper = new ObjectMapper();
 
-        //Dieser Code verursacht die Erstellung einer neuen COnfig bei jedem Programmstart -> no idea why
-        //der Json String wird korrekt eingelesen, sehr seltsam
-        //conf = Try.of(() -> mapper.readValue(json, ConfigFile.class))
-        //        .getOrElse(createNewConfig());
-
         try {
             conf = mapper.readValue(json, ConfigFile.class);
         } catch (IOException e) {
+            e.printStackTrace();
             conf = createNewConfig();
         }
     }
@@ -79,11 +75,17 @@ public class Config {
         ConfigFile newConf = new ConfigFile();
 
         configUI.writeMessage("Creating new Config-File");
-        configUI.writeMessage("Insert your Bot Token:");
 
+        configUI.writeMessage("Insert your Bot Token:");
         String token = configUI.readLine();
+
+        configUI.writeMessage("Enter a username as the first admin:");
+        String admin = configUI.readLine();
+
         newConf.setBotToken(token);
         newConf.setLastMessage(0);
+        newConf.addUserToGroup(admin, "administrators");
+        System.out.println(newConf);
         saveConfig(newConf);
         createdNewConfig = true;
         return newConf;
