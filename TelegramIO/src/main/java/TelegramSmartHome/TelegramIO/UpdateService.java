@@ -47,15 +47,9 @@ public class UpdateService {
     private void getUpdates(){
         List<Update> newMessages = jsonHandler.getNewMessages(lastUpdateId);
         newMessages.forEach(this::notifyUpdateListeners);
-        //Just echoes all new Messages
-        newMessages.forEach(this::echoInput);
         lastUpdateId = (newMessages.size() > 0) ? newMessages.get(newMessages.size()-1).getUpdate_id() : lastUpdateId;
     }
 
-    private void echoInput(Update update) {
-        long chatId = update.getMessage().getChat().getId();
-        httpsHandler.httpsPushRequest(chatId, update.getMessage().getMessageText());
-    }
 
     private void notifyUpdateListeners(Update update) {
         for (IMessageEvaluator evaluator : evaluators){
