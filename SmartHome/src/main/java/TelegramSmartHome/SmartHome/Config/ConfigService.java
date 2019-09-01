@@ -20,7 +20,7 @@ public class ConfigService {
 
     private void editBotToken() {
         if(!config.isNewConfig()) {
-            configUI.writeMessage("Edit Config");
+            configUI.writeMessage("Edit Bottoken (y/n)?");
             String answer = configUI.readLine();
             answer = answer.toLowerCase();
             try {
