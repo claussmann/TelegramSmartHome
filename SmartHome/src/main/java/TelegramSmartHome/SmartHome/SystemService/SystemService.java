@@ -1,5 +1,6 @@
 package TelegramSmartHome.SmartHome.SystemService;
 
+import TelegramSmartHome.SmartHome.UserManagement.UserService;
 import TelegramSmartHome.TelegramIO.IMessageEvaluator;
 import TelegramSmartHome.TelegramIO.message.Message;
 import TelegramSmartHome.TelegramIO.MessageSendService;
@@ -10,9 +11,10 @@ public class SystemService implements IMessageEvaluator {
 
     private final UpdateService updateService;
     private final MessageSendService sendService;
+    private final UserService userService;
 
-    public SystemService(UpdateService updateService, MessageSendService sendService) {
-
+    public SystemService(UpdateService updateService, MessageSendService sendService, UserService userService) {
+        this.userService = userService;
         this.updateService = updateService;
         this.sendService = sendService;
 
@@ -23,12 +25,18 @@ public class SystemService implements IMessageEvaluator {
     public void processMessage(Message message) {
         switch (message.getMessageText()){
             case "/poweroff":
-                sendService.sendMessage(message.getSenderId(), "Power down!\nSee you later!");
-                poweroff();
+                if(userService.memberOf(message.getSenderUsername(), "administrators")) {
+                    sendService.sendMessage(message.getSenderId(), "Power down!\nSee you later!");
+                    poweroff();
+                }
+                else sendService.sendMessage(message.getSenderId(), "You are no admin.");
                 break;
             case "/reboot":
-                sendService.sendMessage(message.getSenderId(), "Rebooting now!\nGive me just a second!");
-                reboot();
+                if(userService.memberOf(message.getSenderUsername(), "administrators")) {
+                    sendService.sendMessage(message.getSenderId(), "Rebooting now!\nGive me just a second!");
+                    reboot();
+                }
+                else sendService.sendMessage(message.getSenderId(), "You are no admin.");
                 break;
             case "/status":
                 sendService.sendMessage(message.getSenderId(), "Waiting for commands!");

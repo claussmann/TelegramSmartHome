@@ -4,6 +4,7 @@ import TelegramSmartHome.SmartHome.Config.Config;
 import TelegramSmartHome.SmartHome.Config.ConfigService;
 import TelegramSmartHome.SmartHome.SmartCam.SmartCam;
 import TelegramSmartHome.SmartHome.SystemService.SystemService;
+import TelegramSmartHome.SmartHome.UserManagement.UserService;
 import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
 import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
@@ -15,9 +16,10 @@ public class SmartHomeApplication {
 
 		MessageSendService sendService = new MessageSendService(config.getBotToken());
 		UpdateService updateService = new UpdateService(config.getBotToken(), config.getLastMessageId());
+        UserService userService = new UserService(config);
 
 		SmartCam cam = new SmartCam(updateService,sendService);
-		SystemService system = new SystemService(updateService,sendService);
+		SystemService system = new SystemService(updateService,sendService, userService);
 
 		updateService.start();
 	}

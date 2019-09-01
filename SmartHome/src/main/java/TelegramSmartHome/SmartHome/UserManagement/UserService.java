@@ -1,14 +1,16 @@
 package TelegramSmartHome.SmartHome.UserManagement;
 
 import TelegramSmartHome.SmartHome.Config.Config;
+import TelegramSmartHome.SmartHome.Config.ConfigService;
+
 import java.util.HashMap;
 
 public class UserService {
 
     HashMap<String, User> users;
-    Config config;
+    ConfigService config;
 
-    public UserService(Config conf) {
+    public UserService(ConfigService conf) {
         users = new HashMap<>();
         config = conf;
     }

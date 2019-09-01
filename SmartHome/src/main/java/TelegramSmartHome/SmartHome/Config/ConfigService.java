@@ -1,5 +1,7 @@
 package TelegramSmartHome.SmartHome.Config;
 
+import java.util.Collection;
+
 public class ConfigService {
 
     private Config config;
@@ -47,4 +49,8 @@ public class ConfigService {
     public String getBotToken() { return config.getBotToken();}
 
     public long getLastMessageId() { return config.getLastMessageID();}
+
+    public Collection<String> groupsOfUser(String username) {
+        return config.groupsOfUser(username);
+    }
 }
