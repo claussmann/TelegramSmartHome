@@ -1,119 +1,106 @@
 package TelegramSmartHome.SmartHome.Config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vavr.control.Try;
 
 import java.io.*;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Config {
     private String configFile = "config.conf"; //TODO:set location to default (/etc/TelegramSmartHome/config) except for developer
 
     private ConfigFile conf;
+    private ConfigUI configUI;
+    private boolean createdNewConfig;
 
-    public Config(){
-        conf = new ConfigFile();
-        manageConfig();
-    }
+    public Config() {
+        createdNewConfig = false;
+        configUI = new ConfigUI();
 
-    private void manageConfig() {
-        String json=readConfigFile();
-        boolean newConfig = false;
+        String json = Try.of(() -> readConfigFile()).getOrElse("");
         ObjectMapper mapper = new ObjectMapper();
+
+        //Dieser Code verursacht die Erstellung einer neuen COnfig bei jedem Programmstart -> no idea why
+        //der Json String wird korrekt eingelesen, sehr seltsam
+        //conf = Try.of(() -> mapper.readValue(json, ConfigFile.class))
+        //        .getOrElse(createNewConfig());
 
         try {
             conf = mapper.readValue(json, ConfigFile.class);
-            System.out.println("Configuration loaded successfully");
         } catch (IOException e) {
-            createNewConfig();
-            newConfig = true;
+            conf = createNewConfig();
         }
-        if(!newConfig) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Edit Config?(y/n)");
-            String answer = "n";
-            try {
-                answer = br.readLine();
-                answer = answer.toLowerCase();
-                if(answer.length()>1 || !(answer.equals("y") || answer.equals("n"))) {
-                    throw new IllegalArgumentException("Input not y or n");
-                }
-            } catch (IOException e) {
-                System.out.println("Invalid answer");
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-            if(answer.equals("y")){
-                editConfig();
-            }
-
-        }
-
     }
 
-    private void editConfig() {
-        System.out.println("Current Bot Token:");
-        System.out.println(conf.botToken);
-        System.out.println("New Bot Token:");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            String token = br.readLine();
-            conf.setBotToken(token);
-            System.out.println("New token saved");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        saveConfig();
+    //Constructor for future Tests -> Mock Injection
+    public Config(ConfigFile configFile, ConfigUI configUI, boolean createdNewConfig) {
+        this.createdNewConfig = createdNewConfig;
+        this.configUI = configUI;
+        this.conf = configFile;
     }
 
-    private String readConfigFile(){
-        BufferedReader reader;
-        String ret="";
-        try {
-            reader = new BufferedReader(new FileReader(configFile));
-            String line;
-            while((line = reader.readLine())!=null){
-                ret+=line;
+
+    public boolean isNewConfig() { return createdNewConfig;}
+
+    public String getBotToken() {
+        return conf.botToken;
+    }
+
+    public void updateBotToken(String newToken) {
+        conf.setBotToken(newToken);
+    }
+
+    public long getLastMessageID() {
+        return conf.lastMessage;
+    }
+
+    public Collection<String> groupsOfUser(String username){
+        Collection<String> groups = new ArrayList<>();
+        for(Usergroup group : conf.getUsergroups()){
+            if(group.containsMember(username)){
+                groups.add(group.getGroupname());
             }
-        } catch (Exception e) {
-            System.out.println("No Config found!");
+        }
+        return groups;
+    }
+
+    private String readConfigFile() throws Exception {
+        String ret = "";
+        BufferedReader reader = new BufferedReader(new FileReader(configFile));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            ret += line;
         }
         return ret;
     }
 
-    private void createNewConfig() {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Creating new Config-File");
-        System.out.println("Insert your Bot Token:");
-        String token = null;
-        try {
-            token = br.readLine();
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        conf.setBotToken(token);
-        conf.setLastMessage(0);
+    private ConfigFile createNewConfig() {
+        ConfigFile newConf = new ConfigFile();
 
-        saveConfig();
+        configUI.writeMessage("Creating new Config-File");
+        configUI.writeMessage("Insert your Bot Token:");
+
+        String token = configUI.readLine();
+        newConf.setBotToken(token);
+        newConf.setLastMessage(0);
+        saveConfig(newConf);
+        createdNewConfig = true;
+        return newConf;
     }
 
-    private void saveConfig() {
+    public  void saveConfig() {
+        saveConfig(conf);
+    }
+
+    private void saveConfig(ConfigFile configFile) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.writeValue(new FileOutputStream("config.conf"), conf);
+            objectMapper.writeValue(new FileOutputStream("config.conf"), configFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Successfully saved Configuration (see config.conf)");
-    }
-
-    public String getBotToken(){
-        return conf.botToken;
-    }
-
-    public int getLastMessageID(){
-        return conf.lastMessage;
+        configUI.writeMessage("Successfully saved Configuration (see "+this.configFile+")");
     }
 
 }
