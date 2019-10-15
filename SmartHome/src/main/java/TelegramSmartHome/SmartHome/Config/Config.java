@@ -45,6 +45,10 @@ public class Config {
         return conf.lastMessage;
     }
 
+    public void updateLastMessageID(long id){
+        conf.setLastMessage(id);
+    }
+
     public Collection<String> groupsOfUser(String username){
         Collection<String> groups = new ArrayList<>();
         for(Usergroup group : conf.getUsergroups()){

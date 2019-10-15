@@ -24,6 +24,10 @@ public class UpdateService {
 
     }
 
+    public long getLastUpdateId(){
+        return lastUpdateId;
+    }
+
     /**
      * Adds an Evaluator to the Queue.
      * All Evaluators will receive the updates from Telegram once the start() method is called.

@@ -35,6 +35,10 @@ public class ConfigService implements IMessageEvaluator {
     public void setUpdateService(UpdateService updateService){
         this.updateService = updateService;
         updateService.addUpdateListener(this);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            config.updateLastMessageID(this.updateService.getLastUpdateId());
+            config.save();
+        }));
     }
 
     public void editBotToken(String newToken) {
