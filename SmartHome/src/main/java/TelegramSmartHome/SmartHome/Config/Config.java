@@ -23,7 +23,7 @@ public class Config {
             conf = mapper.readValue(json, ConfigFile.class);
         } catch (IOException e) {
             System.out.println("The Config does not exist or is invalid.");
-            conf = createNewConfig();
+            createNewConfig();
         }
     }
 
@@ -65,7 +65,7 @@ public class Config {
         return ret;
     }
 
-    private ConfigFile createNewConfig() {
+    private void createNewConfig() {
         ConfigFile newConf = new ConfigFile();
 
         configUI.writeMessage("Creating new Config-File");
@@ -80,22 +80,18 @@ public class Config {
         newConf.setLastMessage(0);
         newConf.addUserToGroup(admin, "administrators");
         System.out.println(newConf);
-        saveConfig(newConf);
-        return newConf;
+        conf = newConf;
+        save();
     }
 
-    public  void saveConfig() {
-        saveConfig(conf);
-    }
-
-    private void saveConfig(ConfigFile configFile) {
+    public void save() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.writeValue(new FileOutputStream("config.conf"), configFile);
+            objectMapper.writeValue(new FileOutputStream("config.conf"), conf);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        configUI.writeMessage("Successfully saved Configuration (see "+this.configFile+")");
+        configUI.writeMessage("Successfully saved Configuration (see "+this.conf+")");
     }
 
 }

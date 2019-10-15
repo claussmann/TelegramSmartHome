@@ -7,26 +7,22 @@ import java.util.List;
 public class ConfigService {
 
     private Config config;
-    private ConfigUI configUI;
     private List<ConfigCache> caches;
 
     public ConfigService() {
         config = new Config();
-        configUI = new ConfigUI();
         caches = new ArrayList<>();
     }
 
     //Constructor for tests
     public ConfigService(Config config, ConfigUI configUI) {
-        this.configUI = configUI;
         this.config = config;
         caches = new ArrayList<>();
     }
 
     public void editBotToken(String newToken) {
         config.updateBotToken(newToken);
-        configUI.writeMessage("New token saved");
-        config.saveConfig();
+        config.save();
 
     }
 
