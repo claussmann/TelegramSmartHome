@@ -17,7 +17,7 @@ public class SmartHomeApplication {
         UserService userService = new UserService(config);
 
 		SmartCam cam = new SmartCam(updateService,sendService);
-		SystemService system = new SystemService(updateService,sendService, userService);
+		SystemService system = new SystemService(updateService,sendService, userService, config);
 
 		updateService.start();
 	}
