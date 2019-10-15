@@ -64,7 +64,8 @@ public class ConfigService implements IMessageEvaluator {
         if(message.getMessageText().startsWith("/bottoken")){
             if(userService.memberOf(message.getSenderUsername(), "administrators")) {
                 sendService.sendMessage(message.getSenderId(), "Updated. Restarting!");
-                config.updateBotToken(message.getMessageText());
+                String token = message.getMessageText().replace("/bottoken ", "");
+                config.updateBotToken(token);
                 config.save();
                 //TODO: Reboot
             }
