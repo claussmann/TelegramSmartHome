@@ -5,6 +5,7 @@ import TelegramSmartHome.TelegramIO.IMessageEvaluator;
 import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
 import TelegramSmartHome.TelegramIO.message.Message;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,15 +14,14 @@ import java.util.List;
 public class ConfigService implements IMessageEvaluator {
 
     private UpdateService updateService;
+    @Setter
     private MessageSendService sendService;
+    @Setter
     private UserService userService;
     private Config config;
     private List<ConfigCache> caches;
 
-    public ConfigService(UpdateService updateService, MessageSendService sendService, UserService userService) {
-        this.updateService = updateService;
-        this.sendService = sendService;
-        this.userService = userService;
+    public ConfigService() {
         config = new Config();
         caches = new ArrayList<>();
     }
@@ -30,6 +30,11 @@ public class ConfigService implements IMessageEvaluator {
     public ConfigService(Config config, ConfigUI configUI) {
         this.config = config;
         caches = new ArrayList<>();
+    }
+
+    public void setUpdateService(UpdateService updateService){
+        this.updateService = updateService;
+        updateService.addUpdateListener(this);
     }
 
     public void editBotToken(String newToken) {
@@ -60,7 +65,7 @@ public class ConfigService implements IMessageEvaluator {
             if(userService.memberOf(message.getSenderUsername(), "administrators")) {
                 sendService.sendMessage(message.getSenderId(), "Updated. Restarting!");
                 config.updateBotToken(message.getMessageText());
-                config.saveConfig();
+                config.save();
                 //TODO: Reboot
             }
             else sendService.sendMessage(message.getSenderId(), "You are no admin.");
