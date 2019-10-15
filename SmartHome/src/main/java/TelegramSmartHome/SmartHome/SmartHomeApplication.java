@@ -8,22 +8,38 @@ import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
 
 public class SmartHomeApplication {
+	static ConfigService config;
+	static MessageSendService sendService;
+	static UpdateService updateService;
+	static UserService userService;
+	static SmartCam cam;
+	static SystemService system;
 
 	public static void main(String[] args) {
-		ConfigService config = new ConfigService();
+		config = new ConfigService();
+		setExitListeners();
+		run();
+	}
 
-		MessageSendService sendService = new MessageSendService(config.getBotToken());
-		UpdateService updateService = new UpdateService(config.getBotToken(), config.getLastMessageId());
-        UserService userService = new UserService(config);
+	public static void restartApplication(){
+		run();
+	}
 
-        config.setSendService(sendService);
-        config.setUpdateService(updateService);
-        config.setUserService(userService);
-
-		SmartCam cam = new SmartCam(updateService,sendService);
-		SystemService system = new SystemService(updateService,sendService, userService);
-
+	public static void run(){
+		sendService = new MessageSendService(config.getBotToken());
+		updateService = new UpdateService(config.getBotToken(), config.getLastMessageId());
+		userService = new UserService(config);
+		config.setSendService(sendService);
+		config.setUpdateService(updateService);
+		config.setUserService(userService);
+		cam = new SmartCam(updateService,sendService);
+		system = new SystemService(updateService,sendService, userService);
 		updateService.start();
 	}
 
+	private static void setExitListeners(){
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			config.setLastMessageId(updateService.getLastUpdateId());
+		}));
+	}
 }

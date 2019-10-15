@@ -39,10 +39,16 @@ public class Config {
 
     public void updateBotToken(String newToken) {
         conf.setBotToken(newToken);
+        save();
     }
 
     public long getLastMessageID() {
         return conf.lastMessage;
+    }
+
+    public void updateLastMessageID(long id){
+        conf.setLastMessage(id);
+        save();
     }
 
     public Collection<String> groupsOfUser(String username){
@@ -66,25 +72,21 @@ public class Config {
     }
 
     private void createNewConfig() {
-        ConfigFile newConf = new ConfigFile();
+        conf = new ConfigFile();
 
-        configUI.writeMessage("Creating new Config-File");
-
-        configUI.writeMessage("Insert your Bot Token:");
+        configUI.writeMessage("Creating new Config-File\nInsert your Bot Token:");
         String token = configUI.readLine();
 
         configUI.writeMessage("Enter a username as the first admin:");
         String admin = configUI.readLine();
 
-        newConf.setBotToken(token);
-        newConf.setLastMessage(0);
-        newConf.addUserToGroup(admin, "administrators");
-        System.out.println(newConf);
-        conf = newConf;
+        conf.setBotToken(token);
+        conf.setLastMessage(0);
+        conf.addUserToGroup(admin, "administrators");
         save();
     }
 
-    public void save() {
+    private void save() {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.writeValue(new FileOutputStream("config.conf"), conf);
