@@ -1,11 +1,11 @@
 package TelegramSmartHome.SmartHome.UserManagement;
 
-import TelegramSmartHome.SmartHome.Config.Config;
+import TelegramSmartHome.SmartHome.Config.ConfigCache;
 import TelegramSmartHome.SmartHome.Config.ConfigService;
 
 import java.util.HashMap;
 
-public class UserService {
+public class UserService implements ConfigCache {
 
     HashMap<String, User> users;
     ConfigService config;
@@ -13,6 +13,7 @@ public class UserService {
     public UserService(ConfigService conf) {
         users = new HashMap<>();
         config = conf;
+        conf.registerCache(this);
     }
 
     public boolean memberOf(String username, String groupId) {
@@ -22,7 +23,6 @@ public class UserService {
         //but we need user -> groups
         //Implementing a Config.getAllUsers() method will be complicated due to this design.
 
-        //TODO: What if config changes? New Users could come any time... what if they already exist but without rights?
         if(users.get(username) == null){
             User user = new User(username);
             for(String group : config.groupsOfUser(username)){
@@ -31,5 +31,10 @@ public class UserService {
             users.put(username, user);
         }
         return users.get(username).isMemberOf(groupId);
+    }
+
+    @Override
+    public void update() {
+        users = new HashMap<>();
     }
 }
