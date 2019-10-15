@@ -37,14 +37,7 @@ public class ConfigService implements IMessageEvaluator {
         updateService.addUpdateListener(this);
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             config.updateLastMessageID(this.updateService.getLastUpdateId());
-            config.save();
         }));
-    }
-
-    public void editBotToken(String newToken) {
-        config.updateBotToken(newToken);
-        config.save();
-
     }
 
     public void registerCache(ConfigCache c) {
@@ -70,7 +63,6 @@ public class ConfigService implements IMessageEvaluator {
                 sendService.sendMessage(message.getSenderId(), "Updated. Restarting!");
                 String token = message.getMessageText().replace("/bottoken ", "");
                 config.updateBotToken(token);
-                config.save();
                 //TODO: Reboot
             }
             else sendService.sendMessage(message.getSenderId(), "You are no admin.");
