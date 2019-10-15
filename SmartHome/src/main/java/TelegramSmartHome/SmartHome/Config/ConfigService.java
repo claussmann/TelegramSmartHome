@@ -65,6 +65,7 @@ public class ConfigService implements IMessageEvaluator {
                 sendService.sendMessage(message.getSenderId(), "Updated. Restarting!");
                 String token = message.getMessageText().replace("/bottoken ", "");
                 config.updateBotToken(token);
+                config.updateLastMessageID(0);
                 SmartHomeApplication.restartApplication();
             }
             else sendService.sendMessage(message.getSenderId(), "You are no admin.");

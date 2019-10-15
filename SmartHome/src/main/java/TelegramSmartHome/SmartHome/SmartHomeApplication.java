@@ -16,18 +16,16 @@ public class SmartHomeApplication {
 	static SystemService system;
 
 	public static void main(String[] args) {
+		config = new ConfigService();
 		setExitListeners();
 		run();
 	}
 
 	public static void restartApplication(){
-		long id = updateService.getLastUpdateId();
-		config.setLastMessageId(updateService.getLastUpdateId());
 		run();
 	}
 
 	public static void run(){
-		config = new ConfigService();
 		sendService = new MessageSendService(config.getBotToken());
 		updateService = new UpdateService(config.getBotToken(), config.getLastMessageId());
 		userService = new UserService(config);
