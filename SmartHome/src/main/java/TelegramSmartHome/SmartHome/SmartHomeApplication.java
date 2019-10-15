@@ -1,11 +1,9 @@
 package TelegramSmartHome.SmartHome;
 
-import TelegramSmartHome.SmartHome.Config.Config;
 import TelegramSmartHome.SmartHome.Config.ConfigService;
 import TelegramSmartHome.SmartHome.SmartCam.SmartCam;
 import TelegramSmartHome.SmartHome.SystemService.SystemService;
 import TelegramSmartHome.SmartHome.UserManagement.UserService;
-import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
 import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
 

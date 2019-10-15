@@ -1,6 +1,5 @@
 package TelegramSmartHome.SmartHome.UserManagement;
 
-import TelegramSmartHome.SmartHome.Config.Config;
 import TelegramSmartHome.SmartHome.Config.ConfigService;
 
 import java.util.HashMap;
