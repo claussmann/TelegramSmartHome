@@ -13,20 +13,17 @@ public class SystemService implements IMessageEvaluator {
     private final UpdateService updateService;
     private final MessageSendService sendService;
     private final UserService userService;
-    private final ConfigService configservice;
 
-    public SystemService(UpdateService updateService, MessageSendService sendService, UserService userService, ConfigService configService) {
+    public SystemService(UpdateService updateService, MessageSendService sendService, UserService userService) {
         this.userService = userService;
         this.updateService = updateService;
         this.sendService = sendService;
-        this.configservice = configService;
 
         updateService.addUpdateListener(this);
     }
 
     @Override
     public void processMessage(Message message) {
-
         switch (message.getMessageText()){
             case "/poweroff":
                 if(userService.memberOf(message.getSenderUsername(), "administrators")) {
