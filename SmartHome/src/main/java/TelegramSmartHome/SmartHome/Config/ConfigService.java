@@ -1,5 +1,6 @@
 package TelegramSmartHome.SmartHome.Config;
 
+import TelegramSmartHome.SmartHome.SmartHomeApplication;
 import TelegramSmartHome.SmartHome.UserManagement.UserService;
 import TelegramSmartHome.TelegramIO.IMessageEvaluator;
 import TelegramSmartHome.TelegramIO.MessageSendService;
@@ -35,9 +36,6 @@ public class ConfigService implements IMessageEvaluator {
     public void setUpdateService(UpdateService updateService){
         this.updateService = updateService;
         updateService.addUpdateListener(this);
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            config.updateLastMessageID(this.updateService.getLastUpdateId());
-        }));
     }
 
     public void registerCache(ConfigCache c) {
@@ -52,6 +50,10 @@ public class ConfigService implements IMessageEvaluator {
         return config.getLastMessageID();
     }
 
+    public void setLastMessageId(long id){
+        config.updateLastMessageID(id);
+    }
+
     public Collection<String> groupsOfUser(String username) {
         return config.groupsOfUser(username);
     }
@@ -63,7 +65,7 @@ public class ConfigService implements IMessageEvaluator {
                 sendService.sendMessage(message.getSenderId(), "Updated. Restarting!");
                 String token = message.getMessageText().replace("/bottoken ", "");
                 config.updateBotToken(token);
-                //TODO: Reboot
+                SmartHomeApplication.restartApplication();
             }
             else sendService.sendMessage(message.getSenderId(), "You are no admin.");
         }
