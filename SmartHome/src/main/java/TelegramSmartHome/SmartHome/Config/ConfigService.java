@@ -14,7 +14,6 @@ public class ConfigService {
         config = new Config();
         configUI = new ConfigUI();
         caches = new ArrayList<>();
-        editBotToken();
     }
 
     //Constructor for tests
@@ -22,42 +21,26 @@ public class ConfigService {
         this.configUI = configUI;
         this.config = config;
         caches = new ArrayList<>();
-        editBotToken();
     }
 
-    private void editBotToken() {
-        if(!config.isNewConfig()) {
-            configUI.writeMessage("Edit Bottoken (y/n)?");
-            String answer = configUI.readLine();
-            answer = answer.toLowerCase();
-            try {
-                if(answer.length()>1 || !(answer.equals("y") || answer.equals("n"))) {
-                    throw new IllegalArgumentException("Input not y or n");
-                }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
-            if(answer.equals("y")){
-                configUI.writeMessage("Current Bot Token:");
-                configUI.writeMessage(config.getBotToken());
-                configUI.writeMessage("New Bot Token:");
+    public void editBotToken(String newToken) {
+        config.updateBotToken(newToken);
+        configUI.writeMessage("New token saved");
+        config.saveConfig();
 
-                String token = configUI.readLine();
-                config.updateBotToken(token);
-                configUI.writeMessage("New token saved");
-
-                config.saveConfig();
-            }
-        }
     }
 
-    public void registerCache(ConfigCache c){
+    public void registerCache(ConfigCache c) {
         caches.add(c);
     }
 
-    public String getBotToken() { return config.getBotToken();}
+    public String getBotToken() {
+        return config.getBotToken();
+    }
 
-    public long getLastMessageId() { return config.getLastMessageID();}
+    public long getLastMessageId() {
+        return config.getLastMessageID();
+    }
 
     public Collection<String> groupsOfUser(String username) {
         return config.groupsOfUser(username);

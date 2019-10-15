@@ -12,10 +12,8 @@ public class Config {
 
     private ConfigFile conf;
     private ConfigUI configUI;
-    private boolean createdNewConfig;
 
     public Config() {
-        createdNewConfig = false;
         configUI = new ConfigUI();
 
         String json = Try.of(() -> readConfigFile()).getOrElse("");
@@ -24,20 +22,16 @@ public class Config {
         try {
             conf = mapper.readValue(json, ConfigFile.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("The Config does not exist or is invalid.");
             conf = createNewConfig();
         }
     }
 
     //Constructor for future Tests -> Mock Injection
     public Config(ConfigFile configFile, ConfigUI configUI, boolean createdNewConfig) {
-        this.createdNewConfig = createdNewConfig;
         this.configUI = configUI;
         this.conf = configFile;
     }
-
-
-    public boolean isNewConfig() { return createdNewConfig;}
 
     public String getBotToken() {
         return conf.botToken;
@@ -87,7 +81,6 @@ public class Config {
         newConf.addUserToGroup(admin, "administrators");
         System.out.println(newConf);
         saveConfig(newConf);
-        createdNewConfig = true;
         return newConf;
     }
 
