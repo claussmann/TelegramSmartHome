@@ -16,8 +16,12 @@ public class SmartHomeApplication {
 		UpdateService updateService = new UpdateService(config.getBotToken(), config.getLastMessageId());
         UserService userService = new UserService(config);
 
+        config.setSendService(sendService);
+        config.setUpdateService(updateService);
+        config.setUserService(userService);
+
 		SmartCam cam = new SmartCam(updateService,sendService);
-		SystemService system = new SystemService(updateService,sendService, userService, config);
+		SystemService system = new SystemService(updateService,sendService, userService);
 
 		updateService.start();
 	}
