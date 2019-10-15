@@ -50,8 +50,8 @@ public class UpdateService {
 
     private void getUpdates(){
         List<Update> newMessages = jsonHandler.getNewMessages(lastUpdateId);
-        newMessages.forEach(this::notifyUpdateListeners);
         lastUpdateId = (newMessages.size() > 0) ? newMessages.get(newMessages.size()-1).getUpdate_id() : lastUpdateId;
+        newMessages.forEach(this::notifyUpdateListeners);
     }
 
 
