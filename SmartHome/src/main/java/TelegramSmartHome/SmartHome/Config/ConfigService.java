@@ -2,7 +2,6 @@ package TelegramSmartHome.SmartHome.Config;
 
 import TelegramSmartHome.SmartHome.SmartHomeApplication;
 import TelegramSmartHome.SmartHome.UserManagement.UserService;
-import TelegramSmartHome.TelegramIO.IMessageEvaluator;
 import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
 import TelegramSmartHome.TelegramIO.message.Message;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ConfigService implements IMessageEvaluator {
+public class ConfigService {
 
     private UpdateService updateService;
     @Setter
@@ -35,7 +34,7 @@ public class ConfigService implements IMessageEvaluator {
 
     public void setUpdateService(UpdateService updateService){
         this.updateService = updateService;
-        updateService.addUpdateListener(this);
+        updateService.addUpdateListener(this::processMessage);
     }
 
     public void registerCache(ConfigCache c) {
@@ -58,7 +57,6 @@ public class ConfigService implements IMessageEvaluator {
         return config.groupsOfUser(username);
     }
 
-    @Override
     public void processMessage(Message message) {
         if(message.getMessageText().startsWith("/bottoken")){
             if(userService.memberOf(message.getSenderUsername(), "administrators")) {

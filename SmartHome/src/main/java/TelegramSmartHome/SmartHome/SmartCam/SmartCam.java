@@ -12,8 +12,6 @@ public class SmartCam {
 
         this.updateService = updateService;
         this.sendService = sendService;
-
-        updateService.addUpdateListener(new SmartCamMessageEvaluator( sendService));
     }
 
 }
