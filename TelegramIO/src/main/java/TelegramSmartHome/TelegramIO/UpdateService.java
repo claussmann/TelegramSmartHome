@@ -1,10 +1,9 @@
 package TelegramSmartHome.TelegramIO;
 
-import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
 import TelegramSmartHome.TelegramIO.apicom.JsonHandler;
 import TelegramSmartHome.TelegramIO.message.Message;
 import TelegramSmartHome.TelegramIO.message.Update;
-import  io.vavr.control.Try;
+import io.vavr.control.Try;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,14 +44,15 @@ public class UpdateService {
         }
     }
 
-    private void getUpdates(){
+    public long getUpdates(){
         List<Update> newMessages = jsonHandler.getNewMessages(lastUpdateId);
         lastUpdateId = (newMessages.size() > 0) ? newMessages.get(newMessages.size()-1).getUpdate_id() : lastUpdateId;
         newMessages.forEach(this::notifyUpdateListeners);
+        return lastUpdateId;
     }
 
 
-    private void notifyUpdateListeners(Update update) {
+    public void notifyUpdateListeners(Update update) {
         Message m = update.getMessage();
         for (Consumer<Message> evaluator : evaluators){
             evaluator.accept(m);
