@@ -1,13 +1,12 @@
 package TelegramSmartHome.SmartHome.SystemService;
 
 import TelegramSmartHome.SmartHome.UserManagement.UserService;
-import TelegramSmartHome.TelegramIO.IMessageEvaluator;
 import TelegramSmartHome.TelegramIO.message.Message;
 import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
 import io.vavr.control.Try;
 
-public class SystemService implements IMessageEvaluator {
+public class SystemService {
 
     private final UpdateService updateService;
     private final MessageSendService sendService;
@@ -18,10 +17,9 @@ public class SystemService implements IMessageEvaluator {
         this.updateService = updateService;
         this.sendService = sendService;
 
-        updateService.addUpdateListener(this);
+        updateService.addUpdateListener(this::processMessage);
     }
 
-    @Override
     public void processMessage(Message message) {
         switch (message.getMessageText()){
             case "/poweroff":

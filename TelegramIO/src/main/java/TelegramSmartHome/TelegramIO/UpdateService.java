@@ -2,16 +2,18 @@ package TelegramSmartHome.TelegramIO;
 
 import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
 import TelegramSmartHome.TelegramIO.apicom.JsonHandler;
+import TelegramSmartHome.TelegramIO.message.Message;
 import TelegramSmartHome.TelegramIO.message.Update;
 import  io.vavr.control.Try;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class UpdateService {
     private String token;
     private long lastUpdateId;
-    List<IMessageEvaluator> evaluators;
+    List<Consumer<Message>> evaluators;
     private JsonHandler jsonHandler;
     private HttpsHandler httpsHandler;
 
@@ -33,7 +35,7 @@ public class UpdateService {
      * All Evaluators will receive the updates from Telegram once the start() method is called.
      * @param evaluator
      */
-    public void addUpdateListener(IMessageEvaluator evaluator){
+    public void addUpdateListener(Consumer<Message> evaluator){
         evaluators.add(evaluator);
     }
 
@@ -56,8 +58,9 @@ public class UpdateService {
 
 
     private void notifyUpdateListeners(Update update) {
-        for (IMessageEvaluator evaluator : evaluators){
-            evaluator.processMessage(update.getMessage());
+        Message m = update.getMessage();
+        for (Consumer<Message> evaluator : evaluators){
+            evaluator.accept(m);
         }
     }
 }
