@@ -11,19 +11,14 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class UpdateService {
-    private String token;
     private long lastUpdateId;
     List<Consumer<Message>> evaluators;
     private JsonHandler jsonHandler;
-    private HttpsHandler httpsHandler;
 
-    public UpdateService(String botToken, long lastUpdateId){
-        this.token=botToken;
-        this.httpsHandler = new HttpsHandler(this.token);
+    public UpdateService(long lastUpdateId, JsonHandler jsonHandler){
         this.lastUpdateId = lastUpdateId;
-        jsonHandler = new JsonHandler(httpsHandler);
+        this.jsonHandler = jsonHandler;
         evaluators = new ArrayList<>();
-
     }
 
     public long getLastUpdateId(){
