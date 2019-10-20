@@ -6,8 +6,8 @@ public class MessageSendService {
 
     private final HttpsHandler httpsHandler;
 
-    public MessageSendService(String botToken){
-        httpsHandler = new HttpsHandler(botToken);
+    public MessageSendService (HttpsHandler httpsHandler){
+        this.httpsHandler = httpsHandler;
     }
 
     public void sendMessage(long chatId, String message) {
