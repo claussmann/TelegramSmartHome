@@ -1,6 +1,7 @@
 package TelegramSmartHome.SmartHome;
 
 import TelegramSmartHome.SmartHome.Config.ConfigService;
+import TelegramSmartHome.SmartHome.Logger.SmartHomeLogger;
 import TelegramSmartHome.SmartHome.SmartCam.SmartCam;
 import TelegramSmartHome.SmartHome.SystemService.SystemService;
 import TelegramSmartHome.SmartHome.UserManagement.UserService;
@@ -8,6 +9,8 @@ import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
 import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
 import TelegramSmartHome.TelegramIO.apicom.JsonHandler;
+
+import java.util.logging.Logger;
 
 public class SmartHomeApplication {
 	static ConfigService config;
@@ -21,6 +24,14 @@ public class SmartHomeApplication {
 
 	public static void main(String[] args) {
 		config = new ConfigService();
+
+
+		//DUMMY EXAMPLE FOR LOGGING
+		Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+		SmartHomeLogger.setup();
+
+		logger.severe("START");
+
 		setExitListeners();
 		run();
 	}
