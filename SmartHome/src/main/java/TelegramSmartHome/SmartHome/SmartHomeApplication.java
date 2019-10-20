@@ -7,6 +7,7 @@ import TelegramSmartHome.SmartHome.UserManagement.UserService;
 import TelegramSmartHome.TelegramIO.MessageSendService;
 import TelegramSmartHome.TelegramIO.UpdateService;
 import TelegramSmartHome.TelegramIO.apicom.HttpsHandler;
+import TelegramSmartHome.TelegramIO.apicom.JsonHandler;
 
 public class SmartHomeApplication {
 	static ConfigService config;
@@ -16,6 +17,7 @@ public class SmartHomeApplication {
 	static SmartCam cam;
 	static SystemService system;
 	static HttpsHandler httpsService;
+	static JsonHandler jsonHandler;
 
 	public static void main(String[] args) {
 		config = new ConfigService();
@@ -29,8 +31,9 @@ public class SmartHomeApplication {
 
 	public static void run(){
 		httpsService = new HttpsHandler(config.getBotToken());
+		jsonHandler = new JsonHandler(httpsService);
 		sendService = new MessageSendService(httpsService);
-		updateService = new UpdateService(config.getBotToken(), config.getLastMessageId());
+		updateService = new UpdateService(config.getLastMessageId(),jsonHandler);
 		userService = new UserService(config);
 		config.setSendService(sendService);
 		config.setUpdateService(updateService);
